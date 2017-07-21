@@ -5,7 +5,7 @@ import * as path from 'path'
 //console.log(process.argv)
 
 const OUTER_JOBKIT_PATH = path.join(process.argv[1], '.')
-const OUTER_WORK_DIR = path.join(process.argv[1], 'testScripts')
+const OUTER_WORK_DIR = path.join(process.argv[1], '.')
 const INNER_JOBKIT_PATH = '/jobkit'
 const INNER_WORK_DIR = '/jobkit/workdir'
 
@@ -55,4 +55,4 @@ async function run(
   )
 }
 
-run('test.js')
+run(process.argv[2])

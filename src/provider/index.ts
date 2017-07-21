@@ -14,7 +14,6 @@ function prepareApis(factories: ApiFactoryRegistry, jobInfo: JobInfo) {
 
 async function run(path: string, jobInfo: JobInfo) {
   const apis = prepareApis(apiFactories, jobInfo)
-  console.log(apis)
   const job = require(path)
   console.log('-----------------------------------------------')
   await job({ ...jobInfo, ...apis })
