@@ -1,0 +1,45 @@
+{
+  "name": "jobkit",
+  "version": "0.0.1",
+  "description": "JavaScript job runner",
+  "main": "lib/cli/index.js",
+  "scripts": {
+    "tsc": "tsc -p src --outDir lib",
+    "tsc:w": "tsc -p src --outDir lib -w",
+    "build": "rm -rf lib && npm run tsc",
+    "build:w": "npm run tsc:w",
+    "start": "node . test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaystack/jobkit.git"
+  },
+  "keywords": [
+    "javascript",
+    "job",
+    "task",
+    "build",
+    "run",
+    "runner",
+    "jenkins",
+    "js",
+    "cli"
+  ],
+  "author": "Peter Hauszknecht <peter.hauszknecht@jaystack.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jaystack/jobkit/issues"
+  },
+  "homepage": "https://github.com/jaystack/jobkit#readme",
+  "devDependencies": {
+    "@types/dockerode": "^2.4.3",
+    "@types/execa": "^0.6.0",
+    "@types/node": "^8.0.14",
+    "typescript": "^2.4.2"
+  },
+  "dependencies": {
+    "dockerode": "^2.5.0",
+    "execa": "^0.7.0",
+    "simple-git": "^1.74.1"
+  }
+}
