@@ -8,7 +8,7 @@
     "tsc:w": "tsc -p src --outDir lib -w",
     "build": "rm -rf lib && npm run tsc",
     "build:w": "npm run tsc:w",
-    "start": "node . testScripts/test.js"
+    "start": "node . scripts/test.js"
   },
   "repository": {
     "type": "git",

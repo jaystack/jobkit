@@ -4,13 +4,14 @@ import * as path from 'path'
 
 //console.log(process.argv)
 
-const OUTER_JOBKIT_PATH = path.join(process.argv[1], '.')
-const OUTER_WORK_DIR = path.join(process.argv[1], '.')
+const OUTER_JOBKIT_PATH = process.argv[1]
+const OUTER_WORK_DIR = process.argv[1]
 const INNER_JOBKIT_PATH = '/jobkit'
 const INNER_WORK_DIR = '/jobkit/workdir'
+const JOB_WORK_DIR = '/home/job'
 
-console.log("OUTER_JOBKIT_PATH", OUTER_JOBKIT_PATH)
-console.log("OUTER_WORK_DIR", OUTER_WORK_DIR)
+console.log('OUTER_JOBKIT_PATH', OUTER_JOBKIT_PATH)
+console.log('OUTER_WORK_DIR', OUTER_WORK_DIR)
 
 function getAbsoluteScriptPath(workDir: string, scriptPath: string): string {
   return path.join(workDir, scriptPath)
@@ -24,6 +25,10 @@ async function run(
   scriptPath: string,
   options: RunOptions = { stream: process.stdout }
 ) {
+  const absoluteProviderPath = getAbsoluteScriptPath(
+    INNER_JOBKIT_PATH,
+    'lib/provider'
+  )
   const absoluteInnerScriptPath = getAbsoluteScriptPath(
     INNER_WORK_DIR,
     scriptPath
@@ -33,15 +38,16 @@ async function run(
     'node',
     [
       'node',
-      path.join(INNER_JOBKIT_PATH, 'lib/provider'),
+      absoluteProviderPath,
       absoluteInnerScriptPath,
-      JSON.stringify({ cwd: INNER_WORK_DIR, buildNumber: 1 } as JobInfo)
+      JSON.stringify({ cwd: JOB_WORK_DIR, buildNumber: 1 } as JobInfo)
     ],
     options.stream,
     {
       Volumes: {
         [INNER_JOBKIT_PATH]: {},
-        [INNER_WORK_DIR]: {}
+        [INNER_WORK_DIR]: {},
+        [JOB_WORK_DIR]: {}
       },
       Hostconfig: {
         Binds: [
@@ -50,7 +56,7 @@ async function run(
         ],
         AutoRemove: true
       },
-      WorkingDir: INNER_JOBKIT_PATH
+      WorkingDir: JOB_WORK_DIR
     }
   )
 }

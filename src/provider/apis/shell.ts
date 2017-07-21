@@ -7,10 +7,7 @@ export interface Options {
   quiet?: boolean
 }
 
-export default (jobInfo: JobInfo) => async (
-  command: string,
-  { cwd = jobInfo.cwd, env = jobInfo.env || {}, quiet = false }: Options = {}
-) => {
+export async function shell(command: string, { cwd, env, quiet }: Options = {}) {
   try {
     const result = await execa.shell(command, { cwd, env })
     if (!quiet) console.log(result.stdout)
@@ -20,3 +17,8 @@ export default (jobInfo: JobInfo) => async (
     return error.message
   }
 }
+
+export default (jobInfo: JobInfo) => (
+  command: string,
+  { cwd = jobInfo.cwd, env = jobInfo.env || {}, quiet = false }: Options = {}
+) => shell(command, { cwd, env, quiet })

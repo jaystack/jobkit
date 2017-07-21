@@ -1,8 +1,13 @@
-import exec, { Options } from './exec'
+import { SimpleGit } from 'simple-git/promise'
+import shell, { Options } from './shell'
 import git from './git'
+import sleep from './sleep'
+import npm from './npm'
 import { JobInfo } from '../../types'
 
 export default {
-  exec,
-  git
+  shell,
+  git,
+  sleep,
+  npm
 }
