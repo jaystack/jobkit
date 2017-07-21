@@ -1,17 +1,16 @@
 import { JobInfo } from '../../types'
-import shellFactory from './shell'
+import { shell } from './shell'
 
-export function npm(shell) {
+export function npm(cwd) {
   return {
-    install: () => shell('npm install'),
-    test: () => shell('npm test'),
-    run: (script: string) => shell(`npm run ${script}`)
+    install: () => shell('npm install', { cwd }),
+    test: () => shell('npm test', { cwd }),
+    run: (script: string) => shell(`npm run ${script}`, { cwd })
   }
 }
 
-export default function(jobInfo: JobInfo) {
-  const shell = shellFactory(jobInfo)
-  const commands = npm.bind(null, shell)()
+export default function({ cwd }: JobInfo) {
+  const commands = npm(cwd)
   Object.keys(commands).forEach(name => (npm[name] = commands[name]))
   return npm
 }

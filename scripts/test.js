@@ -1,10 +1,11 @@
-module.exports = async function({ cwd, buildNumber, shell, git, npm, sleep, docker }) {
+module.exports = async function({ cwd, env, buildNumber, shell, git, npm, sleep, docker }) {
   console.log('I know the cwd:', cwd)
   console.log('I know the build number:', buildNumber)
 
-  console.log('sleep 2000 ms')
-  await sleep(2000)
+  console.log('sleep 500 ms')
+  await sleep(500)
 
+  console.log('git clone')
   await git.clone('https://github.com/jaystack/repatch.git', '.')
 
   await npm.install()
