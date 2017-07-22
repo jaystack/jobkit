@@ -1,4 +1,4 @@
-module.exports = async function({
+module.exports = async ({
   buildNumber,
   params,
   sleep,
@@ -6,7 +6,7 @@ module.exports = async function({
   git,
   npm,
   docker
-}) {
+}) => {
   console.log('build number:', buildNumber)
   console.log('params:', params)
   console.log('env', process.env)
