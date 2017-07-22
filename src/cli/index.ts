@@ -15,9 +15,9 @@ function arrayCollector(expression, acc) {
 }
 
 program
-  .arguments('<script>')
-  .option('-p, --param <param>', 'Add parameter', objectCollector, {})
-  .option('-e, --env <env>', 'Add environment variable', arrayCollector, [])
+  .arguments('<job-script-path>')
+  .option('-p, --param <key>=<value>', 'Add parameter', objectCollector, {})
+  .option('-e, --env <key>=<value>', 'Add environment variable', arrayCollector, [])
   .action(script => {
     const params = program.param
     const env = program.env
