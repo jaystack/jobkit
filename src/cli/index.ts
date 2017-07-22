@@ -21,6 +21,6 @@ program
   .action(script => {
     const params = program.param
     const env = program.env
-    run(process.argv[2], { params, env })
+    run(script, { params, env })
   })
   .parse(process.argv)
