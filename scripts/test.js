@@ -1,6 +1,20 @@
-module.exports = async function({ cwd, env, buildNumber, shell, git, npm, sleep, docker }) {
+module.exports = async function({
+  cwd,
+  buildNumber,
+  params,
+  sleep,
+  shell,
+  git,
+  npm,
+  docker
+}) {
   console.log('I know the cwd:', cwd)
   console.log('I know the build number:', buildNumber)
+  console.log('I know the params:', params)
+
+  /* const stream = await docker.pull('mongo:latest')
+  stream.pipe(process.stdout)
+  await docker.run('mongo') */
 
   console.log('sleep 500 ms')
   await sleep(500)

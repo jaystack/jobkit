@@ -1,7 +1,7 @@
 export interface JobInfo {
   cwd: string
-  env: object
   buildNumber: number
+  params: object
 }
 
 export interface ApiFactoryRegistry {

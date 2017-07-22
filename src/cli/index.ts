@@ -18,12 +18,13 @@ function getAbsoluteScriptPath(workDir: string, scriptPath: string): string {
 }
 
 interface RunOptions {
-  stream: NodeJS.WritableStream
+  stream?: NodeJS.WritableStream
+  params?: object
 }
 
 async function run(
   scriptPath: string,
-  options: RunOptions = { stream: process.stdout }
+  { stream = process.stdout, params = {} }: RunOptions = {}
 ) {
   const absoluteProviderPath = getAbsoluteScriptPath(
     INNER_JOBKIT_PATH,
@@ -33,6 +34,7 @@ async function run(
     INNER_WORK_DIR,
     scriptPath
   )
+  const jobInfo: JobInfo = { cwd: JOB_WORK_DIR, buildNumber: 1, params }
   const docker = new Docker()
   const container = await docker.run(
     'node',
@@ -40,19 +42,21 @@ async function run(
       'node',
       absoluteProviderPath,
       absoluteInnerScriptPath,
-      JSON.stringify({ cwd: JOB_WORK_DIR, buildNumber: 1 } as JobInfo)
+      JSON.stringify(jobInfo)
     ],
-    options.stream,
+    stream,
     {
       Volumes: {
         [INNER_JOBKIT_PATH]: {},
         [INNER_WORK_DIR]: {},
-        [JOB_WORK_DIR]: {}
+        [JOB_WORK_DIR]: {},
+        ['/var/run/docker.sock']: {}
       },
       Hostconfig: {
         Binds: [
           `${OUTER_JOBKIT_PATH}:${INNER_JOBKIT_PATH}`,
-          `${OUTER_WORK_DIR}:${INNER_WORK_DIR}`
+          `${OUTER_WORK_DIR}:${INNER_WORK_DIR}`,
+          `/var/run/docker.sock:/var/run/docker.sock`
         ],
         AutoRemove: true
       },
@@ -61,4 +65,4 @@ async function run(
   )
 }
 
-run(process.argv[2])
+run(process.argv[2], { params: { a: 1 } })
