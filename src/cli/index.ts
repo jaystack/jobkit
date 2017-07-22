@@ -22,7 +22,7 @@ async function run(
   const absoluteInnerScriptPath = path.join(INNER_WORK_DIR, scriptPath)
   const jobInfo: JobInfo = { cwd: JOB_WORK_DIR, buildNumber: 1, params }
   const docker = new Docker()
-  const container = await docker.run(
+  await docker.run(
     'node',
     [
       'node',
@@ -32,6 +32,7 @@ async function run(
     ],
     stream,
     {
+      WorkingDir: JOB_WORK_DIR,
       Volumes: {
         [INNER_JOBKIT_PATH]: {},
         [INNER_WORK_DIR]: {},
@@ -45,8 +46,7 @@ async function run(
           `${DOCKER_SOCKET_PATH}:${DOCKER_SOCKET_PATH}`
         ],
         AutoRemove: true
-      },
-      WorkingDir: JOB_WORK_DIR
+      }
     }
   )
 }
