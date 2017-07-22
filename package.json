@@ -3,12 +3,15 @@
   "version": "0.0.1",
   "description": "JavaScript job runner",
   "main": "lib/cli/index.js",
+  "bin": {
+    "jobkit": "./lib/cli/index.js"
+  },
   "scripts": {
     "tsc": "tsc -p src --outDir lib",
     "tsc:w": "tsc -p src --outDir lib -w",
     "build": "rm -rf lib && npm run tsc",
     "build:w": "npm run tsc:w",
-    "start": "node . scripts/test.js"
+    "start": "node . scripts/test.js -p hello=1 -p a=2 -e TEST_ENV=test"
   },
   "repository": {
     "type": "git",
@@ -32,12 +35,14 @@
   },
   "homepage": "https://github.com/jaystack/jobkit#readme",
   "devDependencies": {
+    "@types/commander": "^2.9.1",
     "@types/dockerode": "^2.4.3",
     "@types/execa": "^0.6.0",
     "@types/node": "^8.0.14",
     "typescript": "^2.4.2"
   },
   "dependencies": {
+    "commander": "^2.11.0",
     "dockerode": "^2.5.0",
     "execa": "^0.7.0",
     "simple-git": "^1.74.1"
