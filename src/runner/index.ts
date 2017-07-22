@@ -5,7 +5,7 @@ import * as path from 'path'
 const OUTER_JOBKIT_PATH = path.join(__dirname, '../..')
 const INNER_JOBKIT_PATH = '/jobkit'
 const CWD = process.cwd()
-const INNER_SOURCE_DIR = '/jobkit/temp'
+const INNER_SOURCE_DIR = '/temp'
 const INNER_WORK_DIR = '/home/job'
 const DOCKER_SOCKET_PATH = '/var/run/docker.sock'
 
