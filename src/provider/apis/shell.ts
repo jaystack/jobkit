@@ -23,4 +23,4 @@ export async function shell(
 export default (jobInfo: JobInfo) => (
   command: string,
   { cwd, env, quiet }: Options = {}
-) => shell(command, { cwd: jobInfo.cwd, env: jobInfo.env, quiet })
+) => shell(command, { cwd: jobInfo.cwd, quiet })

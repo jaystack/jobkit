@@ -2,20 +2,12 @@ import { JobInfo } from '../types'
 import Docker = require('dockerode')
 import * as path from 'path'
 
-//console.log(process.argv)
-
 const OUTER_JOBKIT_PATH = process.argv[1]
 const OUTER_WORK_DIR = process.argv[1]
 const INNER_JOBKIT_PATH = '/jobkit'
 const INNER_WORK_DIR = '/jobkit/workdir'
 const JOB_WORK_DIR = '/home/job'
-
-console.log('OUTER_JOBKIT_PATH', OUTER_JOBKIT_PATH)
-console.log('OUTER_WORK_DIR', OUTER_WORK_DIR)
-
-function getAbsoluteScriptPath(workDir: string, scriptPath: string): string {
-  return path.join(workDir, scriptPath)
-}
+const DOCKER_SOCKET_PATH = '/var/run/docker.sock'
 
 interface RunOptions {
   stream?: NodeJS.WritableStream
@@ -26,14 +18,8 @@ async function run(
   scriptPath: string,
   { stream = process.stdout, params = {} }: RunOptions = {}
 ) {
-  const absoluteProviderPath = getAbsoluteScriptPath(
-    INNER_JOBKIT_PATH,
-    'lib/provider'
-  )
-  const absoluteInnerScriptPath = getAbsoluteScriptPath(
-    INNER_WORK_DIR,
-    scriptPath
-  )
+  const absoluteProviderPath = path.join(INNER_JOBKIT_PATH, 'lib/provider')
+  const absoluteInnerScriptPath = path.join(INNER_WORK_DIR, scriptPath)
   const jobInfo: JobInfo = { cwd: JOB_WORK_DIR, buildNumber: 1, params }
   const docker = new Docker()
   const container = await docker.run(
@@ -50,13 +36,13 @@ async function run(
         [INNER_JOBKIT_PATH]: {},
         [INNER_WORK_DIR]: {},
         [JOB_WORK_DIR]: {},
-        ['/var/run/docker.sock']: {}
+        [DOCKER_SOCKET_PATH]: {}
       },
       Hostconfig: {
         Binds: [
           `${OUTER_JOBKIT_PATH}:${INNER_JOBKIT_PATH}`,
           `${OUTER_WORK_DIR}:${INNER_WORK_DIR}`,
-          `/var/run/docker.sock:/var/run/docker.sock`
+          `${DOCKER_SOCKET_PATH}:${DOCKER_SOCKET_PATH}`
         ],
         AutoRemove: true
       },
