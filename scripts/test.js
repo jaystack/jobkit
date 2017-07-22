@@ -1,5 +1,4 @@
 module.exports = async function({
-  cwd,
   buildNumber,
   params,
   sleep,
@@ -8,9 +7,8 @@ module.exports = async function({
   npm,
   docker
 }) {
-  console.log('I know the cwd:', cwd)
-  console.log('I know the build number:', buildNumber)
-  console.log('I know the params:', params)
+  console.log('build number:', buildNumber)
+  console.log('params:', params)
   console.log('env', process.env)
 
   const mongo = await docker.create('mongo')

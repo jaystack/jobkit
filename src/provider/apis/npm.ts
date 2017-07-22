@@ -9,8 +9,8 @@ export function npm(cwd) {
   }
 }
 
-export default function({ cwd }: JobInfo) {
-  const commands = npm(cwd)
+export default function(jobInfo: JobInfo) {
+  const commands = npm(process.cwd())
   Object.keys(commands).forEach(name => (npm[name] = commands[name]))
   return npm
 }

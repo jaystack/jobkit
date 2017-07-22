@@ -1,5 +1,4 @@
 export interface JobInfo {
-  cwd: string
   buildNumber: number
   params: object
 }
