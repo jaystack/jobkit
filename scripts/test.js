@@ -5,7 +5,8 @@ module.exports = async ({
   shell,
   git,
   npm,
-  docker
+  docker,
+  fs
 }) => {
   console.log('build number:', buildNumber)
   console.log('params:', params)
@@ -21,6 +22,8 @@ module.exports = async ({
 
   console.log('git clone')
   await git.clone('https://github.com/jaystack/repatch.git', '.')
+  const { version } = await fs.readJson('package.json')
+  console.log(version)
   await npm.install()
   await shell('ls -la')
   await npm.run('build')
