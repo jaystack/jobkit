@@ -3,8 +3,6 @@ module.exports = async ({ buildNumber, params, sleep, shell, git, npm, Docker, f
   console.log('params:', params);
   console.log('env', process.env);
 
-  console.log(await docker.listImages({}))
-  /* const docker2 = new Docker();
   const mongo = await docker.create('mongo');
 
   console.log('start mongo', mongo.id);
@@ -25,5 +23,5 @@ module.exports = async ({ buildNumber, params, sleep, shell, git, npm, Docker, f
 
   console.log('stop and remove mongo');
   await mongo.stop();
-  await mongo.remove(); */
+  await mongo.remove();
 };
