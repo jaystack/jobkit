@@ -1,16 +1,11 @@
 {
   "compilerOptions": {
-    "jsx": "react",
-    "target": "es2017",
+    "target": "es6",
+    "outDir": "lib",
     "module": "commonjs",
     "moduleResolution": "node",
-    "declaration": true,
     "sourceMap": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true
   },
-  "exclude": [
-    "node_modules",
-    "lib"
-  ]
+  "exclude": [ "node_modules", "lib" ]
 }
