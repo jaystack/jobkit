@@ -1,26 +1,21 @@
-import execa = require('execa')
-import { JobInfo } from '../../types'
+import execa = require('execa');
+import { JobInfo } from '../../types';
 
 export interface Options {
-  cwd?: string
-  env?: object
-  quiet?: boolean
+  cwd?: string;
+  env?: object;
+  quiet?: boolean;
 }
 
-export async function shell(
-  command: string,
-  { cwd, env = {}, quiet = false }: Options = {}
-) {
-  const promise = execa.shell(command, { cwd, env })
+export async function shell(command: string, { cwd, env = {}, quiet = false }: Options = {}) {
+  const promise = execa.shell(command, { cwd, env });
   if (!quiet) {
-    promise.stdout.pipe(process.stdout)
+    promise.stdout.pipe(process.stdout);
     //promise.stderr.pipe(process.stderr)
   }
-  const result = await promise
-  return result.stdout
+  const result = await promise;
+  return result.stdout;
 }
 
-export default (jobInfo: JobInfo) => (
-  command: string,
-  { cwd, env, quiet }: Options = {}
-) => shell(command, { cwd: process.cwd(), quiet })
+export default (jobInfo: JobInfo) => (command: string, { cwd, env, quiet }: Options = {}) =>
+  shell(command, { cwd: process.cwd(), quiet });
