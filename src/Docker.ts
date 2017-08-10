@@ -37,34 +37,51 @@ export default class Docker extends Dockerode {
   createContainer(options, callback?): any {
     const { Image: imageName } = options;
     if (callback) {
-      this.listImages({}, (err, images) => {
+      this.ensureImage(imageName, options, err => (err ? callback(err) : super.createContainer(options, callback)));
+    } else {
+      return this.ensureImage(imageName, options).then(() => super.createContainer(options));
+    }
+  }
+
+  hasImage(imageName: string, callback: Callback<boolean>): void;
+  hasImage(imageName: string): Promise<boolean>;
+  hasImage(imageName, callback?) {
+    const exp = new RegExp(imageName);
+    const test = images => images.some(imageInfo => imageInfo.RepoTags.some(repoTag => exp.test(repoTag)));
+    if (callback) {
+      this.listImages({}, (err, images) => (err ? callback(err) : callback(test(images))));
+    } else {
+      return this.listImages().then(test);
+    }
+  }
+
+  ensureImage(imageName: string, options?: object): Promise<void>;
+  ensureImage(imageName: string, options: object, callback: Callback<void>): void;
+  ensureImage(imageName: string, callback: Callback<void>): void;
+  ensureImage(imageName, ...otherArgs) {
+    const options = otherArgs.find(arg => arg && arg.constructor === Object) || {};
+    const callback = otherArgs.find(arg => arg && typeof arg === 'function');
+    if (callback) {
+      this.hasImage(imageName, (err, has) => {
         if (err) return callback(err);
-        if (hasImage(images, imageName)) {
+        if (has) {
           super.createContainer(options, callback);
         } else {
           this.pull(imageName, {}, err => {
-            if (err) return callback(err);
-            super.createContainer(options, callback);
+            err ? callback(err) : callback(null);
           });
         }
       });
     } else {
-      return this.listImages().then(
-        images =>
-          hasImage(images, imageName)
-            ? super.createContainer(options)
-            : this.pull(imageName).then(() => super.createContainer(options))
-      );
+      return this.hasImage(imageName).then(has => (has ? Promise.resolve() : this.pull(imageName)));
     }
   }
 }
 
-function hasImage(imageList: Dockerode.ImageInfo[], imageName: string) {
-  const exp = new RegExp(imageName);
-  return imageList.some(imageInfo => imageInfo.RepoTags.some(repoTag => exp.test(repoTag)));
-}
-
 function printPullProgress(chunk: string) {
-  const { id, status = '', progress = '' } = JSON.parse(chunk);
-  console.log(`${id}: ${status} ${progress}`);
+  const lines = chunk.toString().split('\n').filter(_ => _);
+  lines.forEach(line => {
+    const { id, status = '', progress = '' } = JSON.parse(line);
+    console.log(`${id}: ${status} ${progress}`);
+  });
 }

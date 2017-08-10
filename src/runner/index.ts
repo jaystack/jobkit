@@ -1,5 +1,5 @@
 import { JobInfo } from '../types';
-import Docker = require('dockerode');
+import Docker from '../Docker';
 import * as path from 'path';
 
 const OUTER_JOBKIT_PATH = path.join(__dirname, '../..');
