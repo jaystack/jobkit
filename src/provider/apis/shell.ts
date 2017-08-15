@@ -1,21 +1,24 @@
+import { Readable } from 'stream';
 import execa = require('execa');
 import { JobInfo } from '../../types';
 
 export interface Options {
   cwd?: string;
   env?: object;
-  quiet?: boolean;
+  stream?: NodeJS.WritableStream;
 }
 
-export const shell = async (command: string, { cwd, env = {}, quiet = false }: Options = {}) => {
+export const shell = async (
+  command: string,
+  { cwd = process.cwd(), env = {}, stream = process.stdout }: Options = {}
+) => {
   const promise = execa.shell(command, { cwd, env });
-  if (!quiet) {
-    promise.stdout.pipe(process.stdout);
-    //promise.stderr.pipe(process.stderr)
+  if (stream) {
+    promise.stdout.pipe(stream);
   }
   const result = await promise;
   return result.stdout;
 };
 
-export default (jobInfo: JobInfo) => (command: string, { cwd, env, quiet }: Options = {}) =>
-  shell(command, { cwd: process.cwd(), quiet });
+export default (jobInfo: JobInfo) => (command: string, { cwd, env, stream }: Options = {}) =>
+  shell(command, { cwd, stream });
