@@ -15,10 +15,7 @@ export interface RunOptions {
   env?: string[];
 }
 
-export default async function run(
-  scriptPath: string,
-  { stream = process.stdout, params = {}, env = [] }: RunOptions = {}
-) {
+export default async (scriptPath: string, { stream = process.stdout, params = {}, env = [] }: RunOptions = {}) => {
   const absoluteProviderPath = path.join(INNER_JOBKIT_PATH, 'lib/provider');
   const absoluteInnerScriptPath = path.join(INNER_SOURCE_DIR, scriptPath);
   const jobInfo: JobInfo = { buildNumber: 1, params };
@@ -41,6 +38,6 @@ export default async function run(
       AutoRemove: true
     }
   });
-}
+};
 
 process.on('unhandledRejection', error => console.error(error));

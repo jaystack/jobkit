@@ -78,10 +78,10 @@ export default class Docker extends Dockerode {
   }
 }
 
-function printPullProgress(chunk: string) {
+const printPullProgress = (chunk: string) => {
   const lines = chunk.toString().split('\n').filter(_ => _);
   lines.forEach(line => {
     const { id, status = '', progress = '' } = JSON.parse(line);
     console.log(`${id}: ${status} ${progress}`);
   });
-}
+};

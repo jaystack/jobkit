@@ -7,7 +7,7 @@ export interface Options {
   quiet?: boolean;
 }
 
-export async function shell(command: string, { cwd, env = {}, quiet = false }: Options = {}) {
+export const shell = async (command: string, { cwd, env = {}, quiet = false }: Options = {}) => {
   const promise = execa.shell(command, { cwd, env });
   if (!quiet) {
     promise.stdout.pipe(process.stdout);
@@ -15,7 +15,7 @@ export async function shell(command: string, { cwd, env = {}, quiet = false }: O
   }
   const result = await promise;
   return result.stdout;
-}
+};
 
 export default (jobInfo: JobInfo) => (command: string, { cwd, env, quiet }: Options = {}) =>
   shell(command, { cwd: process.cwd(), quiet });
