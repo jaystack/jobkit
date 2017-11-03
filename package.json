@@ -6,6 +6,10 @@
   "bin": {
     "jobkit": "./lib/cli/index.js"
   },
+  "files": [
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "tsc": "tsc -p src --outDir lib",
     "tsc:w": "tsc -p src --outDir lib -w",
